@@ -48,11 +48,9 @@ PON:      onu_state O5 / ONU-ID 分配成功 / lifecycle operational
 光功率:   rx -18.63 dBm / tx +3.58 dBm
 PPP oE:   up，正常拿到运营商内网地址
 延迟:     ping 223.5.5.5 ≈ 36 ms
-吞吐:     ~590 Mbps（24 线程，CPU 99% 打满）
 ```
 
-**注意吞吐**：PonWrt 的 PPPoE/NAT 走**软件转发**，本机实测约 590 Mbps，
-约为原厂固件（923 Mbps）的 60%。想跑满千兆需改桥接让路由器拨号。
+**注意吞吐**：PonWrt 的 PPPoE/NAT 走**软件转发**。
 
 ---
 
