@@ -1,0 +1,27 @@
+# Binaries and per-device data must never be committed
+*.bin
+*.fip
+*.itb
+*.img
+*.tar.zst
+*.iso
+*.pcap
+*.pcap0
+
+# Exported device configs / credentials
+*.conf
+*.xml
+factory_conf*
+*_factory_backup*
+credentials*
+secrets*
+
+# OS noise
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
