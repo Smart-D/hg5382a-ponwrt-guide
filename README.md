@@ -56,17 +56,105 @@ PPP oE:   up，正常拿到运营商内网地址
 
 ---
 
-## 三、工具与素材
+## 三、工具与素材（全部文件直链）
 
-| 工具 | 用途 | 来源 |
+> 以下为本指南**实测所用版本**，链接均为 GitHub Release 直链（已逐一验证可达）。
+
+### 3.1 文件清单
+
+#### ① 刷入工具（所有机型通用）
+
+| 文件 | 大小 | 直链 |
 |---|---|---|
-| `an758x-stock2ubi` | 免拆刷入工具（在光猫上跑，提供 Web UI） | [pbs05/an758x-stock2ubi](https://github.com/pbs05/an758x-stock2ubi/releases) |
-| `uboot-an758x`（官方引导） | 重建 UBI 后刷回的 preloader + bl31-u-boot.fip | [pbs05/uboot-an758x](https://github.com/pbs05/uboot-an758x/releases) |
-| `uboot-an758x-winbond`（**华邦迁移版**） | Winbond 颗粒专用，8bit 读 / 4bit 写 | [xe5700/uboot-an758x-winbond](https://github.com/xe5700/uboot-an758x-winbond/releases) |
-| PonWrt 固件 | `ponwrt-airoha-an7581-*-squashfs-sysupgrade.itb` | [pbs05/ponwrt](https://github.com/pbs05/ponwrt) 或 [huladabang/ponwrt](https://github.com/huladabang/ponwrt/tags) |
-| `hg5382a_factory_tools.zip` | JFFS2 提取 + factory.bin 拼装 | 见[致谢](#致谢)里 7a3daf 的帖子附件 |
+| `an758x-stock2ubi` | 991 KB | [下载](https://github.com/pbs05/an758x-stock2ubi/releases/download/v0.1.14/an758x-stock2ubi) |
 
----
+#### ② 华邦（Winbond）迁移版引导 —— **华邦颗粒必须先刷这套**
+
+| 文件 | 大小 | 直链 |
+|---|---|---|
+| `an7581-fiberhome-hg5382a-preloader-tmp-8bit-read-4bit-write.bin` | 111 KB | [下载](https://github.com/xe5700/uboot-an758x-winbond/releases/download/v2026.07-4-winbond/an7581-fiberhome-hg5382a-preloader-tmp-8bit-read-4bit-write.bin) |
+| `an7581-fiberhome-hg5382a-firstblock-tmp-8bit-read-4bit-write.bin` | 128 KB | [下载](https://github.com/xe5700/uboot-an758x-winbond/releases/download/v2026.07-4-winbond/an7581-fiberhome-hg5382a-firstblock-tmp-8bit-read-4bit-write.bin) |
+| `an7581-fiberhome-hg5382a-bl31-u-boot-tmp-8bit-read-4bit-write.fip` | 324 KB | [下载](https://github.com/xe5700/uboot-an758x-winbond/releases/download/v2026.07-4-winbond/an7581-fiberhome-hg5382a-bl31-u-boot-tmp-8bit-read-4bit-write.fip) |
+
+#### ③ 官方引导 —— 重建 UBI **之后**刷回
+
+| 文件 | 大小 | 直链 |
+|---|---|---|
+| `an7581-fiberhome-hg5382a-preloader.bin` | 113 KB | [下载](https://github.com/pbs05/uboot-an758x/releases/download/v2026.07-4/an7581-fiberhome-hg5382a-preloader.bin) |
+| `an7581-fiberhome-hg5382a-firstblock.bin` | 128 KB | [下载](https://github.com/pbs05/uboot-an758x/releases/download/v2026.07-4/an7581-fiberhome-hg5382a-firstblock.bin) |
+| `an7581-fiberhome-hg5382a-bl31-u-boot.fip` | 333 KB | [下载](https://github.com/pbs05/uboot-an758x/releases/download/v2026.07-4/an7581-fiberhome-hg5382a-bl31-u-boot.fip) |
+
+#### ④ 系统固件
+
+| 文件 | 大小 | 直链 |
+|---|---|---|
+| `ponwrt-an7581.tar.zst`（整包，含所有 an7581 机型） | 331 MB | [下载](https://github.com/huladabang/ponwrt/releases/download/zn504xg-d-20261004/ponwrt-an7581.tar.zst) |
+
+解压后只取自己机型那一个：
+
+```
+an7581/ponwrt-airoha-an7581-fiberhome_hg5382a-squashfs-sysupgrade.itb    13.7 MB   ← 刷这个
+an7581/ponwrt-airoha-an7581-fiberhome_hg5382a-initramfs-recovery.itb     11.6 MB   ← 可选，内存启动修复
+```
+
+> Windows 自带 `tar.exe`（bsdtar + libzstd）可直接解 `.tar.zst`，无需另装 zstd。
+> 也可用 7-Zip / PeaZip。
+
+#### ⑤ factory 校准工具
+
+| 文件 | 说明 |
+|---|---|
+| `hg5382a_factory_tools.zip`（约 23 KB） | 恩山帖子附件，**需登录**才能下载：[原帖](https://www.right.com.cn/forum/thread-8493012-1-1.html) |
+
+内含 5 个脚本：`fh_tool.py`（开 telnet）、`telnet_dl.py`（从光猫取文件）、
+**`jffs2_extract.py`**（解 JFFS2 取 `table`）、**`build_factory.py`**（拼 1 MiB factory.bin）、
+`gen_synth_table.py`（校准表格式转换与自检）。
+
+> 本仓库不转载这些脚本（版权归原作者），请从原帖获取。
+
+### 3.2 换机型怎么改文件名
+
+把上面文件名里的 `hg5382a` 替换成：
+
+| 机型 | 替换为 |
+|---|---|
+| HG5585F 电信版 | `hg5585f-ct` |
+| HG5585F 联通版 | `hg5585f-cu` |
+
+固件包里对应 `fiberhome_hg5585f-ct*` / `fiberhome_hg5585f-cu*`。
+本指南实测机型为 HG5382A，其他机型文件名规则相同但**未逐台验证**。
+
+### 3.3 一键下载（Linux / macOS / WSL）
+
+```bash
+WB=https://github.com/xe5700/uboot-an758x-winbond/releases/download/v2026.07-4-winbond
+OFF=https://github.com/pbs05/uboot-an758x/releases/download/v2026.07-4
+FW=https://github.com/huladabang/ponwrt/releases/download/zn504xg-d-20261004
+
+mkdir -p fw && cd fw
+
+# ① 刷入工具
+curl -LO https://github.com/pbs05/an758x-stock2ubi/releases/download/v0.1.14/an758x-stock2ubi
+
+# ② 华邦迁移版（华邦颗粒第一次写入用）
+curl -LO $WB/an7581-fiberhome-hg5382a-preloader-tmp-8bit-read-4bit-write.bin
+curl -LO $WB/an7581-fiberhome-hg5382a-firstblock-tmp-8bit-read-4bit-write.bin
+curl -LO $WB/an7581-fiberhome-hg5382a-bl31-u-boot-tmp-8bit-read-4bit-write.fip
+
+# ③ 官方引导（重建 UBI 后刷回）
+curl -LO $OFF/an7581-fiberhome-hg5382a-preloader.bin
+curl -LO $OFF/an7581-fiberhome-hg5382a-firstblock.bin
+curl -LO $OFF/an7581-fiberhome-hg5382a-bl31-u-boot.fip
+
+# ④ 固件包（331 MB）并解出本机镜像
+curl -LO $FW/ponwrt-an7581.tar.zst
+tar -xf ponwrt-an7581.tar.zst \
+    an7581/ponwrt-airoha-an7581-fiberhome_hg5382a-squashfs-sysupgrade.itb
+
+ls -l
+```
+
+> 下载后建议核对大小（见上表）。GitHub 页面也会给出每个 Release 的 `sha256sums`。
 
 ## 四、⚠️ 刷机前必须做的备份（否则必废）
 
