@@ -1,4 +1,4 @@
-# 烽火 HG5382A / HG5582A / HG5585F 刷 PonWrt 完整指南
+# 烽火 HG5382A / HG5582A  刷 PonWrt 完整指南
 
 > Airoha AN7581 · 平行 NAND · XG-PON / XGS-PON
 >
